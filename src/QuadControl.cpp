@@ -81,15 +81,6 @@ VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momen
   cmd.desiredThrustsN[2] = (collThrustCmd + thrust_x - thrust_y + thrust_z) / 4.0;
   cmd.desiredThrustsN[3] = (collThrustCmd - thrust_x - thrust_y - thrust_z) / 4.0;
 
-//    float tx = momentCmd[0] / l;
-//    float ty = momentCmd[1] / l;
-//    float tz = momentCmd[2] / kappa;
-
-//    cmd.desiredThrustsN[0] = (-tz+ty+tx+collThrustCmd)/4.0;
-//    cmd.desiredThrustsN[1] = (tz+ty-tx+collThrustCmd)/4.0;
-//    cmd.desiredThrustsN[2] = (tz-ty+tx+collThrustCmd)/4.0;
-//    cmd.desiredThrustsN[3] = (-tz-ty-tx+collThrustCmd)/4.0;
-
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
   return cmd;
@@ -146,7 +137,19 @@ V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, floa
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  if (collThrustCmd <= 0.0) {
+      return V3F(0.0, 0.0, 0.0);
+  }
 
+  float c_d = collThrustCmd / mass;
+
+  float target_R13 = fmax(fmin(accelCmd[0] / c_d, maxTiltAngle), -maxTiltAngle);
+  float target_R23 = fmax(fmin(accelCmd[1] / c_d, maxTiltAngle), -maxTiltAngle);
+
+  float p_cmd = (1 / R(2, 2)) * (-R(1, 0) * kpBank * (R(0, 2) - target_R13) + R(0, 0) * kpBank * (R(1, 2) * target_R23));
+  float q_cmd = (1 / R(2, 2)) * (-R(1, 1) * kpBank * (R(0, 2) - target_R13) + R(0, 1) * kpBank * (R(1, 2) * target_R23));
+
+  return V3F(p_cmd, q_cmd, 0.0);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
@@ -178,7 +181,7 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
-
+  thrust = mass * 9.81f;
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
   
