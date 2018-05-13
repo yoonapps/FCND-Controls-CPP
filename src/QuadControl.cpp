@@ -181,7 +181,15 @@ float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, flo
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
-  thrust = mass * 9.81f;
+  float hdotCmd = kpPosZ * (posZCmd - posZ) + velZCmd;
+  printf("FUCK %f", hdotCmd);
+  hdotCmd = fmin(fmax(hdotCmd, -maxDescentRate), maxAscentRate);
+
+  float accCmd = accelZCmd + kpVelZ * (hdotCmd - velZ) - 9.81f;
+
+  thrust = mass * ((accCmd / R(2, 2)));
+
+  thrust = fmin(fmax(thrust, minMotorThrust), maxMotorThrust);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
   
@@ -219,7 +227,15 @@ V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel
 
   ////////////////////////////// BEGIN STUDENT CODE ///////////////////////////
 
+  V3F velocityCmd = kpPosXY * (posCmd - pos);
+
+  float norm = velocityCmd.magXY();
+
+  if (norm > maxSpeedXY) {
+      velocityCmd = velocityCmd * maxSpeedXY / norm;
+  }
   
+  accelCmd = accelCmdFF + velocityCmd + kpVelXY * (velCmd - vel);
 
   /////////////////////////////// END STUDENT CODE ////////////////////////////
 
