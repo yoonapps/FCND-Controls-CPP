@@ -10,12 +10,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/QuadControl.cpp"
-            timestampString = "548009644.6974421"
+            timestampString = "548009918.149508"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "152"
             endingLineNumber = "152"
             landmarkName = "QuadControl::RollPitchControl(V3F accelCmd, Quaternion&lt;float&gt; attitude, float collThrustCmd)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/QuadControl.cpp"
+            timestampString = "548009921.93145"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
+            landmarkName = "QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion&lt;float&gt; attitude, float accelZCmd, float dt)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
